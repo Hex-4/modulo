@@ -1,5 +1,13 @@
 <script>
-	import { differenceInSeconds, startOfYear } from 'date-fns';
+	import {
+		differenceInSeconds,
+		startOfDay,
+		startOfHour,
+		startOfMonth,
+		startOfWeek,
+		startOfYear
+	} from 'date-fns';
+	import { browser } from '$app/environment';
 
 	function changeBg() {
 		document.querySelector(':root').style.setProperty('--bg-color', '#ffffff');
@@ -43,10 +51,29 @@
 	let nowDots = $state(0);
 	setInterval(() => {
 		let date = new Date();
-		let start = startOfYear(date);
+		let start;
+		if (timerange == 'hour') {
+			start = startOfHour(date);
+		} else if (timerange == 'day') {
+			start = startOfDay(date);
+		} else if (timerange == 'week') {
+			start = startOfWeek(date);
+		} else if (timerange == 'month') {
+			start = startOfMonth(date);
+		} else if (timerange == 'year') {
+			start = startOfYear(date);
+		}
 		let diff = differenceInSeconds(date, start);
-		nowDots = diff / secondsPer[unit];
+		nowDots = Math.floor(diff / secondsPer[unit]);
 	}, 100);
+
+	let dotElems = $derived.by(() => {
+		if (browser) {
+			return document.getElementsByClassName('dot');
+		} else {
+			return 0;
+		}
+	});
 
 	let rows = $derived(Math.ceil(dots / cols));
 	let lastRow = $derived(dots % cols);
@@ -59,9 +86,17 @@
 			<div class="flex flex-row gap-1">
 				{#each cols != null ? { length: cols } : { length: 1 }, dot}
 					{#if lastRow == 0}
-						<div class="bg-primary size-6 rounded-full"></div>
+						{#if row * cols + dot + 1 <= nowDots}
+							<div class="bg-primary dot size-6 rounded-full"></div>
+						{:else}
+							<div class="bg-inactive dot size-6 rounded-full"></div>
+						{/if}
 					{:else if dot + 1 <= lastRow || row + 1 != rows}
-						<div class="bg-primary size-6 rounded-full"></div>
+						{#if row * cols + dot + 1 <= nowDots}
+							<div class="bg-primary dot size-6 rounded-full"></div>
+						{:else}
+							<div class="bg-inactive dot size-6 rounded-full"></div>
+						{/if}
 					{/if}
 				{/each}
 			</div>
