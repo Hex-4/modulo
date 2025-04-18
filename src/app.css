@@ -1,2 +1,17 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+
+:root {
+    --bg-color: #000105;
+    --inactive-color: #13132a;
+    --active-color: #e1bc1a;
+    --text-color: #c1c1c1;
+}
+
+@theme {
+    --color-bg: var(--bg-color);
+    --color-inactive: var(--inactive-color);
+    --color-primary: var(--active-color);
+    --color-text: var(--text-color);
+}
