@@ -3,10 +3,10 @@
 
 
 :root {
-    --bg-color: #000105;
-    --inactive-color: #13132a;
-    --active-color: #e1bc1a;
-    --text-color: #c1c1c1;
+    --bg-color: #11111b;
+    --inactive-color: #1e1e2e;
+    --active-color: #fab387;
+    --text-color: #cdd6f4;
 }
 
 @theme {

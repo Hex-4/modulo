@@ -173,4 +173,10 @@
 		<option value="month">a month</option>
 		<option value="year">a year</option>
 	</select>
+
+	<div popover id="test" class="size-24 bg-primary">
+		<!-- <ColorPicker components={ChromeVariant} sliderDirection="horizontal" isDialog={false} /> -->
+		
+	</div>
+	<button popovertarget="test" class="bg-inactive text-text"> test</button>
 </div>
