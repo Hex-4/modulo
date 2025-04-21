@@ -4,9 +4,12 @@
 		startOfDay,
 		startOfHour,
 		startOfMonth,
-		startOfWeek,
-		startOfYear
+		startOfISOWeek,
+		startOfYear,
+		sub,
+		isLeapYear
 	} from 'date-fns';
+	import Dot from '../components/dot.svelte';
 	import { browser } from '$app/environment';
 
 	function changeBg() {
@@ -24,6 +27,27 @@
 		month: 30 * 24 * 60 * 60, // average month
 		year: 365 * 24 * 60 * 60 // non-leap year
 	};
+
+	let daysInMonth = $state([
+		31,
+		isLeapYear(new Date()) ? 29 : 28,
+		31,
+		30,
+		31,
+		30,
+		31,
+		31,
+		30,
+		31,
+		30,
+		31
+	]);
+	setInterval(
+		() => {
+			daysInMonth[1] = isLeapYear(new Date()) ? 29 : 28;
+		},
+		1000 * 60 * 60 * 24
+	);
 
 	let dots = $derived.by(() => {
 		const secondsInUnit = secondsPer[unit];
@@ -57,11 +81,11 @@
 		} else if (timerange == 'day') {
 			start = startOfDay(date);
 		} else if (timerange == 'week') {
-			start = startOfWeek(date);
+			start = startOfISOWeek(date);
 		} else if (timerange == 'month') {
-			start = startOfMonth(date);
+			start = sub(startOfMonth(date), { days: 1 });
 		} else if (timerange == 'year') {
-			start = startOfYear(date);
+			start = sub(startOfYear(date), { days: 1 });
 		}
 		let diff = differenceInSeconds(date, start);
 		nowDots = Math.floor(diff / secondsPer[unit]);
@@ -75,33 +99,50 @@
 		}
 	});
 
+	function calcAmountOfDots(row, dot) {
+		let dots = 0;
+		for (const i of Array.from(Array(row).keys())) {
+			dots += daysInMonth[i];
+		}
+		dots += dot + 1;
+		return dots;
+	}
+
 	let rows = $derived(Math.ceil(dots / cols));
 	let lastRow = $derived(dots % cols);
 	$inspect(nowDots);
 </script>
 
-<div class="bg-bg h-screen w-screen p-50">
+{#snippet grid()}
 	<div class="flex flex-col gap-1">
 		{#each rows != Infinity ? { length: rows } : { length: 1 }, row}
 			<div class="flex flex-row gap-1">
 				{#each cols != null ? { length: cols } : { length: 1 }, dot}
 					{#if lastRow == 0}
-						{#if row * cols + dot + 1 <= nowDots}
-							<div class="bg-primary dot size-6 rounded-full"></div>
-						{:else}
-							<div class="bg-inactive dot size-6 rounded-full"></div>
-						{/if}
+						<Dot dotNum={row * cols + dot + 1} {nowDots} />
 					{:else if dot + 1 <= lastRow || row + 1 != rows}
-						{#if row * cols + dot + 1 <= nowDots}
-							<div class="bg-primary dot size-6 rounded-full"></div>
-						{:else}
-							<div class="bg-inactive dot size-6 rounded-full"></div>
-						{/if}
+						<Dot dotNum={row * cols + dot + 1} {nowDots} />
 					{/if}
 				{/each}
 			</div>
 		{/each}
 	</div>
+{/snippet}
+
+<div class="bg-bg h-screen w-screen p-50">
+	{#if timerange === 'year' && colsName === 'month'}
+		<div class="flex flex-col gap-1">
+			{#each { length: 12 }, row}
+				<div class="flex flex-row gap-1">
+					{#each { length: daysInMonth[row] }, dot}
+						<Dot dotNum={calcAmountOfDots(row, dot)} {nowDots} />
+					{/each}
+				</div>
+			{/each}
+		</div>
+	{:else}
+		{@render grid()}
+	{/if}
 
 	<br />
 
