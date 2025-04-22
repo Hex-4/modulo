@@ -7,6 +7,10 @@
     --inactive-color: #1e1e2e;
     --active-color: #fab387;
     --text-color: #cdd6f4;
+    --red-color: #f38ba8;
+    --yellow-color: #f9e2af;
+    --green-color: #a6e3a1;
+    --blue-color: #89b4fa;
 }
 
 @theme {
@@ -14,4 +18,8 @@
     --color-inactive: var(--inactive-color);
     --color-primary: var(--active-color);
     --color-text: var(--text-color);
+    --color-red: var(--red-color);
+    --color-yellow: var(--yellow-color);
+    --color-green: var(--green-color);
+    --color-blue: var(--blue-color);
 }
