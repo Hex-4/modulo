@@ -114,7 +114,7 @@
 </script>
 
 {#snippet grid()}
-	<div class="flex flex-col gap-1">
+	<div class="flex flex-col">
 		{#each rows != Infinity ? { length: rows } : { length: 1 }, row}
 			<div class="flex flex-row gap-1">
 				{#each cols != null ? { length: cols } : { length: 1 }, dot}
@@ -129,8 +129,8 @@
 	</div>
 {/snippet}
 
-<div class="bg-bg h-screen w-screen p-50">
-	{#if timerange === 'year' && colsName === 'month'}
+<div class="bg-bg h-full w-full min-h-screen min-w-screen p-50">
+	{#if timerange === 'year' && colsName === 'month' && unit === "day"}
 		<div class="flex flex-col gap-1">
 			{#each { length: 12 }, row}
 				<div class="flex flex-row gap-1">
