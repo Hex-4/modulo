@@ -38,6 +38,7 @@
 	},
 	"dependencies": {
 		"chromapicker": "^1.0.2",
-		"date-fns": "^4.1.0"
+		"date-fns": "^4.1.0",
+		"lockr": "^0.9.0-beta.2"
 	}
 }

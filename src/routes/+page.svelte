@@ -11,6 +11,8 @@
 	} from 'date-fns';
 	import Dot from '../components/dot.svelte';
 	import { browser } from '$app/environment';
+	import * as Lockr from "lockr"
+
 
 	function changeBg() {
 		document.querySelector(':root').style.setProperty('--bg-color', '#ffffff');
@@ -18,6 +20,9 @@
 
 	let unit = $state('day');
 	let timerange = $state('month');
+
+	let currentColors = $state(new Array(30).fill(''));
+	let currentNotes = $state(new Array(30).fill(''));
 
 	const secondsPer = {
 		min: 60,
@@ -110,7 +115,21 @@
 
 	let rows = $derived(Math.ceil(dots / cols));
 	let lastRow = $derived(dots % cols);
-	$inspect(nowDots);
+
+	let viewID = $derived(timerange + unit + colsName);
+
+	function save() {
+		console.log("SAVING!")
+		Lockr.set(viewID + "_notes", currentNotes)
+		Lockr.set(viewID + "_colors", currentColors)
+	}
+
+	$effect(() => {
+		currentColors = Lockr.get(viewID + "_colors", new Array(30).fill(''))
+		currentNotes = Lockr.get(viewID + "_notes", new Array(30).fill(''))
+	})
+
+	$inspect(currentColors);
 </script>
 
 {#snippet grid()}
@@ -119,9 +138,19 @@
 			<div class="flex flex-row gap-1">
 				{#each cols != null ? { length: cols } : { length: 1 }, dot}
 					{#if lastRow == 0}
-						<Dot dotNum={row * cols + dot + 1} {nowDots} />
+						<Dot
+							dotNum={row * cols + dot + 1}
+							{nowDots}
+							bind:newColor={currentColors[calcAmountOfDots(row, dot) - 1]}
+							bind:note={currentNotes[calcAmountOfDots(row, dot) - 1]}
+						/>
 					{:else if dot + 1 <= lastRow || row + 1 != rows}
-						<Dot dotNum={row * cols + dot + 1} {nowDots} />
+						<Dot
+							dotNum={row * cols + dot + 1}
+							{nowDots}
+							bind:newColor={currentColors[calcAmountOfDots(row, dot) - 1]}
+							bind:note={currentNotes[calcAmountOfDots(row, dot) - 1]}
+						/>
 					{/if}
 				{/each}
 			</div>
@@ -129,13 +158,18 @@
 	</div>
 {/snippet}
 
-<div class="bg-bg h-full w-full min-h-screen min-w-screen p-50">
-	{#if timerange === 'year' && colsName === 'month' && unit === "day"}
+<div class="bg-bg h-full min-h-screen w-full min-w-screen p-50 transition-all">
+	{#if timerange === 'year' && colsName === 'month' && unit === 'day'}
 		<div class="flex flex-col gap-1">
 			{#each { length: 12 }, row}
 				<div class="flex flex-row gap-1">
 					{#each { length: daysInMonth[row] }, dot}
-						<Dot dotNum={calcAmountOfDots(row, dot)} {nowDots} />
+						<Dot
+							dotNum={calcAmountOfDots(row, dot)}
+							{nowDots}
+							bind:newColor={currentColors[calcAmountOfDots(row, dot) - 1]}
+							bind:note={currentNotes[calcAmountOfDots(row, dot) - 1]}
+						/>
 					{/each}
 				</div>
 			{/each}
@@ -174,9 +208,8 @@
 		<option value="year">a year</option>
 	</select>
 
-	<div popover id="test" class="size-24 bg-primary">
-		<!-- <ColorPicker components={ChromeVariant} sliderDirection="horizontal" isDialog={false} /> -->
-		
-	</div>
-	<button popovertarget="test" class="bg-inactive text-text"> test</button>
+	<br />
+
+	<button class="bg-inactive text-text" onclick={save}>save notes and colors to this view</button>
+	<button class="bg-inactive text-text">reset saved data for this view</button>
 </div>

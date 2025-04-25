@@ -6,6 +6,7 @@
       "dependencies": {
         "chromapicker": "^1.0.2",
         "date-fns": "^4.1.0",
+        "lockr": "^0.9.0-beta.2",
       },
       "devDependencies": {
         "@eslint/compat": "^1.2.5",
@@ -502,6 +503,8 @@
     "locate-character": ["locate-character@3.0.0", "", {}, "sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA=="],
 
     "locate-path": ["locate-path@6.0.0", "", { "dependencies": { "p-locate": "^5.0.0" } }, "sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw=="],
+
+    "lockr": ["lockr@0.9.0-beta.2", "", {}, "sha512-kxlAUIdLZ6pClbhlFQBjSC7fdytyk2Y2O+htfgFwegHhKOqrJ7krK1QZOe5yHPBxvvqXpMRE4zLTHkjhB3Be8Q=="],
 
     "lodash.castarray": ["lodash.castarray@4.4.0", "", {}, "sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q=="],
 
