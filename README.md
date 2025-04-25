@@ -27,6 +27,8 @@ To save your color and note customizations, click the `save notes and colors to 
 
 Modulo is made with Svelte and SvelteKit, with a library called lockr to interface with localStorage, and date-fns to help with time calculations. Once a time range is selected, Modulo calculates the amount of dots needed and creates them with Svelte {#each} blocks. Notes and colors are saved to an array, which is then put into localStorage when you click the save button, associated with the current view. Every time you change views, Modulo checks localStorage for saved data, and loads it if it exists.
 
+Modulo was named after the modulo operator `%`, which finds the remainder of a division operation. Modulo finds the remainder of a period of time. Your time is constantly divided and fought for. Seems like a fitting name.
+
 ## Why
 
 Too often we take time for granted.
