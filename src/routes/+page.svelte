@@ -124,6 +124,13 @@
 		Lockr.set(viewID + "_colors", currentColors)
 	}
 
+	function reset() {
+		Lockr.rm(viewID + "_notes")
+		Lockr.rm(viewID + "_colors")
+		currentColors = new Array(30).fill('')
+		currentNotes = new Array(30).fill('')
+	}
+
 	$effect(() => {
 		currentColors = Lockr.get(viewID + "_colors", new Array(30).fill(''))
 		currentNotes = Lockr.get(viewID + "_notes", new Array(30).fill(''))
@@ -181,7 +188,7 @@
 	<br />
 
 	<label for="time-range" class="text-text">showing</label>
-	<select name="time-range" id="time-range" class="bg-inactive text-text" bind:value={timerange}>
+	<select name="time-range" id="time-range" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={timerange}>
 		<option value="hour">this hour</option>
 		<option value="day">this day</option>
 		<option value="week">this week</option>
@@ -190,7 +197,7 @@
 	</select>
 
 	<label for="dot-is" class="text-text">with each dot being</label>
-	<select name="dot-is" id="dot-is" class="bg-inactive text-text" bind:value={unit}>
+	<select name="dot-is" id="dot-is" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={unit}>
 		<option value="min">a minute</option>
 		<option value="hour">an hour</option>
 		<option value="day">a day</option>
@@ -200,7 +207,7 @@
 	</select>
 
 	<label for="cols" class="text-text">and each row representing</label>
-	<select name="cols" id="dot-is" class="bg-inactive text-text" bind:value={colsName}>
+	<select name="cols" id="dot-is" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={colsName}>
 		<option value="hour">an hour</option>
 		<option value="day">a day</option>
 		<option value="week">a week</option>
@@ -210,6 +217,6 @@
 
 	<br />
 
-	<button class="bg-inactive text-text" onclick={save}>save notes and colors to this view</button>
-	<button class="bg-inactive text-text">reset saved data for this view</button>
+	<button class="bg-inactive text-text mt-2 mr-2 px-3 rounded-lg py-1 hover:bg-primary hover:text-inactive transition-all duration-300 " onclick={save}>save notes and colors to this view</button>
+	<button class="bg-inactive text-text mt-2 mr-2 px-3 rounded-lg py-1 hover:bg-primary hover:text-inactive transition-all duration-300 " onclick={reset}>reset saved data for this view</button>
 </div>
