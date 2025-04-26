@@ -11,8 +11,8 @@
 	} from 'date-fns';
 	import Dot from '../components/dot.svelte';
 	import { browser } from '$app/environment';
-	import * as Lockr from "lockr"
-
+	import * as Lockr from 'lockr';
+	import ColorPicker from 'svelte-awesome-color-picker';
 
 	function changeBg() {
 		document.querySelector(':root').style.setProperty('--bg-color', '#ffffff');
@@ -119,22 +119,30 @@
 	let viewID = $derived(timerange + unit + colsName);
 
 	function save() {
-		console.log("SAVING!")
-		Lockr.set(viewID + "_notes", currentNotes)
-		Lockr.set(viewID + "_colors", currentColors)
+		console.log('SAVING!');
+		Lockr.set(viewID + '_notes', currentNotes);
+		Lockr.set(viewID + '_colors', currentColors);
 	}
 
 	function reset() {
-		Lockr.rm(viewID + "_notes")
-		Lockr.rm(viewID + "_colors")
-		currentColors = new Array(30).fill('')
-		currentNotes = new Array(30).fill('')
+		Lockr.rm(viewID + '_notes');
+		Lockr.rm(viewID + '_colors');
+		currentColors = new Array(30).fill('');
+		currentNotes = new Array(30).fill('');
+	}
+
+	function getVar(varName) {
+		if (browser) {
+			return window.getComputedStyle(document.documentElement).getPropertyValue(varName);
+		} else {
+			return "#FFFFFF"
+		}
 	}
 
 	$effect(() => {
-		currentColors = Lockr.get(viewID + "_colors", new Array(30).fill(''))
-		currentNotes = Lockr.get(viewID + "_notes", new Array(30).fill(''))
-	})
+		currentColors = Lockr.get(viewID + '_colors', new Array(30).fill(''));
+		currentNotes = Lockr.get(viewID + '_notes', new Array(30).fill(''));
+	});
 
 	$inspect(currentColors);
 </script>
@@ -188,7 +196,12 @@
 	<br />
 
 	<label for="time-range" class="text-text">showing</label>
-	<select name="time-range" id="time-range" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={timerange}>
+	<select
+		name="time-range"
+		id="time-range"
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive rounded-lg p-1 transition-all duration-300"
+		bind:value={timerange}
+	>
 		<option value="hour">this hour</option>
 		<option value="day">this day</option>
 		<option value="week">this week</option>
@@ -197,7 +210,12 @@
 	</select>
 
 	<label for="dot-is" class="text-text">with each dot being</label>
-	<select name="dot-is" id="dot-is" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={unit}>
+	<select
+		name="dot-is"
+		id="dot-is"
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive rounded-lg p-1 transition-all duration-300"
+		bind:value={unit}
+	>
 		<option value="min">a minute</option>
 		<option value="hour">an hour</option>
 		<option value="day">a day</option>
@@ -207,7 +225,12 @@
 	</select>
 
 	<label for="cols" class="text-text">and each row representing</label>
-	<select name="cols" id="dot-is" class="bg-inactive text-text p-1 rounded-lg hover:bg-primary hover:text-inactive transition-all duration-300" bind:value={colsName}>
+	<select
+		name="cols"
+		id="dot-is"
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive rounded-lg p-1 transition-all duration-300"
+		bind:value={colsName}
+	>
 		<option value="hour">an hour</option>
 		<option value="day">a day</option>
 		<option value="week">a week</option>
@@ -217,6 +240,51 @@
 
 	<br />
 
-	<button class="bg-inactive text-text mt-2 mr-2 px-3 rounded-lg py-1 hover:bg-primary hover:text-inactive transition-all duration-300 " onclick={save}>save notes and colors to this view</button>
-	<button class="bg-inactive text-text mt-2 mr-2 px-3 rounded-lg py-1 hover:bg-primary hover:text-inactive transition-all duration-300 " onclick={reset}>reset saved data for this view</button>
+	<button
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive mt-2 mr-2 rounded-lg px-3 py-1 transition-all duration-300"
+		onclick={save}>save notes and colors to this view</button
+	>
+	<button
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive mt-2 mr-2 rounded-lg px-3 py-1 transition-all duration-300"
+		onclick={reset}>reset saved data for this view</button
+	>
+
+	<br />
+
+	<button
+		class="bg-inactive text-text hover:bg-primary hover:text-inactive mt-2 mr-2 rounded-lg px-3 py-1 transition-all duration-300"
+		popovertarget="theming-menu">open theming menu</button
+	>
+
+	<div
+		popover
+		class="bg-bg border-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-row items-center gap-3 rounded-xl border-1 p-4 transition-all backdrop:backdrop-blur-sm open:flex overflow-visible"
+		id="theming-menu"
+	>
+	<div class="picker flex flex-col gap-3 *:hover:font-extrabold *:transition-all *:duration-175">
+		<ColorPicker hex={getVar("--bg-color")} label="Background" onInput={(event) => {document.querySelector(':root').style.setProperty('--bg-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--inactive-color")} label="Inactive" onInput={(event) => {document.querySelector(':root').style.setProperty('--inactive-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--active-color")} label="Active" onInput={(event) => {document.querySelector(':root').style.setProperty('--active-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--red-color")} label="Red" onInput={(event) => {document.querySelector(':root').style.setProperty('--red-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--yellow-color")} label="Yellow" onInput={(event) => {document.querySelector(':root').style.setProperty('--yellow-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--green-color")} label="Green" onInput={(event) => {document.querySelector(':root').style.setProperty('--green-color', event.hex)}}/>
+		<ColorPicker hex={getVar("--blue-color")} label="Blue" onInput={(event) => {document.querySelector(':root').style.setProperty('--blue-color', event.hex)}}/>
+
+	</div>
+	
 </div>
+</div>
+
+<style>
+	.picker {
+		--cp-bg-color: var(--bg-color);
+		--cp-border-color: var(--text-color);
+		--cp-text-color: var(--text-color);
+		--cp-input-color: var(--inactive-color);
+		--cp-button-hover-color: var(--active-color);
+		--slider-width: 20px;
+		--picker-indicator-size: 15px;
+		--focus-color: var(--active-color);
+		--picker-z-index: 100
+	}
+</style>
