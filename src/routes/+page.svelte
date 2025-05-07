@@ -256,6 +256,13 @@
 		popovertarget="theming-menu">open theming menu</button
 	>
 
+	<br>
+	<br>
+
+	<p class="text-text opacity-70 italic">click on a dot to change its color/note</p>
+
+	<p class="text-text opacity-70 italic">Modulo is <a href="https://github.com/Hex-4/modulo" class="underline transition-all hover:underline-offset-5 underline-offset-2 hover:text-text">open source</a>, by <a class="underline transition-all hover:underline-offset-5 underline-offset-2 hover:text-text" href="https://hex4.pages.dev">hex4</a></p>
+
 	<div
 		popover
 		class="bg-bg border-text absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-row items-center gap-3 rounded-xl border-1 p-4 transition-all backdrop:backdrop-blur-sm open:flex overflow-visible"
